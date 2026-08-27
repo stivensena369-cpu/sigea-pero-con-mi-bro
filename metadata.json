@@ -1,0 +1,6 @@
+{
+  "name": "SIGEA - Gestión de Entornos y Activos",
+  "description": "Sistema Integral de Gestión de Entornos y Activos para el control de sesiones de formación y trazabilidad de activos tecnológicos (PCs, monitores, periféricos) mediante códigos QR.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
