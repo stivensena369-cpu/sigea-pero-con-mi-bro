@@ -1,20 +1,29 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# SIGEA-platform
 
-# Run and deploy your AI Studio app
+Sistema Integral de Gestión de Entornos y Activos, desarrollado para el SENA.
+Administra el uso de activos tecnológicos (monitor, teclado, mouse, torre)
+durante las clases de formación, garantizando trazabilidad completa mediante
+registro por código QR o manual.
 
-This contains everything you need to run your app locally.
+## Tecnologías
 
-View your app in AI Studio: https://ai.studio/apps/f65008b4-e3b4-4cff-82b2-2e3cb9e3421c
+- Frontend: React + TypeScript + Vite
+- Backend: ...
+- Base de datos: PostgreSQL
 
-## Run Locally
+## Cómo correr el proyecto
 
-**Prerequisites:**  Node.js
+1. Clonar el repositorio
+2. git checkout develop
+3. npm install
+4. npm run dev
 
+## Equipo
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+- Stiven - Lider Backend
+- Sebastian - Lider BD
+- Astrid - Lider Frontend
+
+## Estado del proyecto
+
+En desarrollo activo, en construcción.
