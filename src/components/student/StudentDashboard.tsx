@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSigea } from '../../context/SigeaContext';
-import { TipoActivo, RegistroActivo } from '../../types';
+import { TipoActivo } from '../../types';
 import { QRScannerModal } from '../common/QRScannerModal';
 import { QRBadgeModal } from '../common/QRBadgeModal';
 import { ReportNovedadModal } from '../common/ReportNovedadModal';
@@ -21,9 +21,6 @@ import {
   History,
   CheckSquare,
   ShieldAlert,
-  Calendar,
-  Layers,
-  ArrowRight,
   ExternalLink,
   Trash2
 } from 'lucide-react';
@@ -53,17 +50,16 @@ export const StudentDashboard: React.FC = () => {
   const [reportModalOpen, setReportModalOpen] = useState(false);
   const [reportTargetQr, setReportTargetQr] = useState<string | undefined>(undefined);
 
-  // Finalize Class Modal
+  // Modales
   const [showFinalizeModal, setShowFinalizeModal] = useState(false);
   const [estadoDevolucion, setEstadoDevolucion] = useState<'Excelente' | 'Bueno' | 'Con Novedad'>('Excelente');
   const [observacionesFinal, setObservacionesFinal] = useState('');
   const [finalizedSuccess, setFinalizedSuccess] = useState(false);
 
-  // Change Workstation Request Modal
   const [showChangeRequestModal, setShowChangeRequestModal] = useState(false);
   const [motivoCambio, setMotivoCambio] = useState('Equipo no enciende / Problema de hardware');
 
-  // Scanner alert toast
+  // Notificaciones Toast
   const [scanToast, setScanToast] = useState<{ success: boolean; message: string } | null>(null);
 
   const activeClass = getActiveClass();
@@ -78,17 +74,15 @@ export const StudentDashboard: React.FC = () => {
 
   const isComplete = isStudentWorkstationComplete(studentDoc, activeClassId);
 
-  // Check if instructor authorized a change
   const myChangeRequest = solicitudesCambio.find(
     s => s.aprendizDoc === studentDoc && s.claseId === activeClassId
   );
   const wasAuthorizedRecently = myChangeRequest?.estado === 'Autorizado' && studentRegistrations.length === 0;
 
-  // Determine required asset slots for current classroom
   const requiredSlots: { type: TipoActivo; label: string; icon: React.ReactNode }[] = [
     {
       type: activeAmbiente?.tipoEquipamiento === 'All_in_One' ? 'Todo-en-Uno' : 'Monitor',
-      label: activeAmbiente?.tipoEquipamiento === 'All_in_One' ? 'Computador Todo-en-Uno (AIO)' : 'Monitor Principal (24")',
+      label: activeAmbiente?.tipoEquipamiento === 'All_in_One' ? 'Computador Todo-en-Uno (AIO)' : 'Monitor Principal',
       icon: activeAmbiente?.tipoEquipamiento === 'All_in_One' ? <Tv className="w-6 h-6" /> : <Monitor className="w-6 h-6" />
     },
     {
@@ -106,7 +100,7 @@ export const StudentDashboard: React.FC = () => {
   if (activeAmbiente?.tipoEquipamiento === 'Torre_y_Perifericos') {
     requiredSlots.push({
       type: 'Torre',
-      label: 'Torre CPU / Computador',
+      label: 'Torre CPU',
       icon: <Cpu className="w-6 h-6" />
     });
   }
@@ -127,9 +121,7 @@ export const StudentDashboard: React.FC = () => {
     const res = registrarActivo(studentDoc, activeClassId, codigoQr, targetType);
     setScannerOpen(false);
     setScanToast(res);
-    setTimeout(() => {
-      setScanToast(null);
-    }, 4500);
+    setTimeout(() => setScanToast(null), 4500);
   };
 
   const handleSendChangeRequest = (e: React.FormEvent) => {
@@ -150,18 +142,18 @@ export const StudentDashboard: React.FC = () => {
     setFinalizedSuccess(true);
   };
 
-  // Past student registrations history
   const pastRegistrations = registros.filter(r => r.id_usuario === studentDoc);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+    <div className="min-h-screen bg-slate-100 text-slate-800 p-4 sm:p-6 lg:p-8 space-y-6">
+
       {/* Toast Notification */}
       {scanToast && (
         <div
-          className={`p-4 rounded-2xl border shadow-lg flex items-center justify-between animate-in fade-in slide-in-from-top-4 duration-200 ${
+          className={`p-4 rounded-xl border shadow-lg flex items-center justify-between animate-in fade-in slide-in-from-top-4 ${
             scanToast.success
-              ? 'bg-emerald-50 border-emerald-300 text-emerald-900'
-              : 'bg-red-50 border-red-300 text-red-900'
+              ? 'bg-white border-emerald-500 text-emerald-800'
+              : 'bg-white border-red-500 text-red-800'
           }`}
         >
           <div className="flex items-center space-x-3">
@@ -172,132 +164,111 @@ export const StudentDashboard: React.FC = () => {
             )}
             <span className="text-xs font-semibold">{scanToast.message}</span>
           </div>
-          <button
-            onClick={() => setScanToast(null)}
-            className="text-xs font-bold text-slate-400 hover:text-slate-700 ml-4"
-          >
+          <button onClick={() => setScanToast(null)} className="text-xs font-bold text-slate-400 hover:text-slate-700 ml-4">
             ✕
           </button>
         </div>
       )}
 
-      {/* Authorized Workstation Change Banner */}
+      {/* Banner de Autorización de Cambio */}
       {wasAuthorizedRecently && (
-        <div className="p-4 bg-amber-500 text-slate-950 rounded-2xl shadow-md border-2 border-amber-400 flex items-center justify-between animate-pulse">
+        <div className="p-4 bg-emerald-600 text-white rounded-xl shadow-md border border-emerald-500 flex items-center justify-between animate-pulse">
           <div className="flex items-center space-x-3">
-            <Sparkles className="w-6 h-6 text-slate-950" />
+            <Sparkles className="w-6 h-6 text-white" />
             <div>
-              <h4 className="font-bold text-sm">¡Cambio de Puesto Autorizado por el Instructor!</h4>
-              <p className="text-xs font-medium text-slate-900">
-                Tus activos anteriores fueron liberados. Por favor procede a escanear los códigos QR de tu nueva estación.
+              <h4 className="font-bold text-sm">¡Cambio de Puesto Autorizado!</h4>
+              <p className="text-xs text-emerald-100">
+                Procede a escanear los códigos QR de tu nueva estación de trabajo.
               </p>
             </div>
           </div>
           <button
             onClick={() => handleOpenScanner(requiredSlots[0].type)}
-            className="px-4 py-2 bg-[#004481] text-white rounded-xl text-xs font-bold shadow-md hover:bg-blue-900 transition-colors shrink-0"
+            className="px-4 py-2 bg-white text-emerald-700 rounded-lg text-xs font-bold shadow-md hover:bg-slate-100 transition-colors"
           >
-            Comenzar Nuevo Escaneo
+            Escanear Nuevo Puesto
           </button>
         </div>
       )}
 
-      {/* Top Banner: Active Class Session Card */}
+      {/* Banner Superior de la Clase Activa */}
       {activeClass && (
-        <div className="bg-gradient-to-r from-[#004481] to-[#002f5a] rounded-2xl p-6 text-white shadow-xl relative overflow-hidden">
-          <div className="absolute right-0 top-0 w-80 h-full bg-white/5 skew-x-12 pointer-events-none" />
-
+        <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm relative overflow-hidden">
           <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div className="space-y-2">
               <div className="flex items-center space-x-2 text-xs">
-                <span className="bg-[#F9A800] text-slate-900 font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider text-[10px]">
+                <span className="bg-emerald-600 text-white font-bold px-2.5 py-0.5 rounded-md uppercase text-[10px]">
                   Sesión en Curso
                 </span>
-                <span className="text-blue-200">Ficha: {activeClass.fichaId} (ADSO)</span>
-                <span className="text-blue-300">•</span>
-                <span className="text-blue-200">Clase #{activeClass.id}</span>
+                <span className="text-slate-500">Ficha: {activeClass.fichaId} (ADSO)</span>
               </div>
 
-              <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+              <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
                 {activeClass.tema}
               </h2>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 text-xs text-blue-100">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 text-xs text-slate-600">
                 <div className="flex items-center space-x-2">
-                  <MapPin className="w-4 h-4 text-[#F9A800]" />
-                  <span>
-                    {activeAmbiente?.nombre.split('-')[0]} • {activeSede?.nombre.split('(')[0]}
-                  </span>
+                  <MapPin className="w-4 h-4 text-emerald-600" />
+                  <span>{activeAmbiente?.nombre.split('-')[0]} • {activeSede?.nombre.split('(')[0]}</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <Clock className="w-4 h-4 text-[#F9A800]" />
-                  <span>
-                    {activeClass.fecha} | {activeClass.hora_inicio} - {activeClass.hora_fin}
-                  </span>
+                  <Clock className="w-4 h-4 text-emerald-600" />
+                  <span>{activeClass.fecha} | {activeClass.hora_inicio} - {activeClass.hora_fin}</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <UserCheck className="w-4 h-4 text-[#F9A800]" />
+                  <UserCheck className="w-4 h-4 text-emerald-600" />
                   <span>Instructor: {instructor ? `${instructor.nombre} ${instructor.apellido}` : 'Carlos Ramírez'}</span>
                 </div>
               </div>
             </div>
 
-            {/* Right Workstation Status Capsule */}
-            <div className="bg-white/10 backdrop-blur-md p-4 rounded-xl border border-white/20 text-center min-w-[200px] shrink-0">
-              <span className="text-[11px] text-blue-200 uppercase tracking-wider font-semibold block mb-1">
+            {/* Cápsula de estado del puesto */}
+            <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 text-center min-w-[200px] shrink-0">
+              <span className="text-[11px] text-slate-500 uppercase font-semibold block mb-1">
                 Estado del Puesto
               </span>
               <div className="flex items-center justify-center space-x-2 mb-2">
-                <span
-                  className={`w-3 h-3 rounded-full ${
-                    isComplete ? 'bg-emerald-400 animate-pulse' : 'bg-red-400'
-                  }`}
-                />
-                <span className="font-bold text-sm text-white">
-                  {isComplete ? 'Puesto Completo (Listo)' : `${completedCount} de ${totalRequired} Activos`}
+                <span className={`w-3 h-3 rounded-full ${isComplete ? 'bg-emerald-500' : 'bg-red-500 animate-pulse'}`} />
+                <span className="font-bold text-sm text-slate-900">
+                  {isComplete ? 'Puesto Completo' : `${completedCount} de ${totalRequired} Activos`}
                 </span>
               </div>
-              {/* Progress Bar */}
-              <div className="w-full bg-blue-950/60 rounded-full h-2 overflow-hidden border border-blue-400/30">
+              <div className="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
                 <div
-                  className={`h-full transition-all duration-500 ${
-                    isComplete ? 'bg-emerald-400' : 'bg-[#F9A800]'
-                  }`}
+                  className={`h-full transition-all duration-500 ${isComplete ? 'bg-emerald-500' : 'bg-red-500'}`}
                   style={{ width: `${progressPercent}%` }}
                 />
               </div>
-              <span className="text-[10px] text-blue-200 mt-1 block">
-                {isComplete ? '100% verificado' : `Faltan ${totalRequired - completedCount} activos por escanear`}
-              </span>
             </div>
           </div>
         </div>
       )}
 
-      {/* Navigation Tabs for Student */}
-      <div className="flex items-center justify-between border-b border-slate-200 pb-2">
+      {/* Tabs de Navegación */}
+      <div className="flex items-center justify-between border-b border-slate-200 pb-3">
         <div className="flex space-x-2">
           <button
             onClick={() => setActiveTab('registro')}
-            className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all ${
+            className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-bold transition-all border ${
               activeTab === 'registro'
-                ? 'bg-[#004481] text-white shadow-md'
-                : 'text-slate-600 hover:bg-slate-100'
+                ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm'
+                : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
             }`}
           >
-            <CheckSquare className="w-4 h-4 text-[#F9A800]" />
+            <CheckSquare className="w-4 h-4" />
             <span>Registro de Puesto Actual</span>
           </button>
           <button
             onClick={() => setActiveTab('historial')}
-            className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all ${
+            className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-bold transition-all border ${
               activeTab === 'historial'
-                ? 'bg-[#004481] text-white shadow-md'
-                : 'text-slate-600 hover:bg-slate-100'
+                ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm'
+                : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
             }`}
           >
-            <History className="w-4 h-4 text-[#F9A800]" />
-            <span>Mi Historial de Activos y Clases</span>
+            <History className="w-4 h-4" />
+            <span>Mi Historial de Activos</span>
           </button>
         </div>
 
@@ -306,30 +277,29 @@ export const StudentDashboard: React.FC = () => {
             setReportTargetQr('');
             setReportModalOpen(true);
           }}
-          className="flex items-center space-x-1.5 text-xs text-amber-800 bg-amber-50 hover:bg-amber-100 border border-amber-300 px-3 py-1.5 rounded-xl font-semibold transition-colors"
+          className="flex items-center space-x-1.5 text-xs text-amber-700 bg-amber-50 hover:bg-amber-100 border border-amber-200 px-3 py-2 rounded-xl font-semibold transition-colors"
         >
           <ShieldAlert className="w-3.5 h-3.5 text-amber-600" />
-          <span className="hidden sm:inline">Reportar Novedad / Daño</span>
+          <span className="hidden sm:inline">Reportar Novedad</span>
         </button>
       </div>
 
-      {/* TAB 1: WORKSTATION ASSET REGISTRATION MATRIX */}
+      {/* TAB 1: REGISTRO DE PUESTO */}
       {activeTab === 'registro' && (
         <div className="space-y-6">
-          {/* Instructions bar */}
-          <div className="bg-blue-50/70 border border-blue-200 rounded-xl p-3.5 text-xs text-blue-900 flex items-center justify-between">
+          <div className="bg-white border border-slate-200 rounded-xl p-3.5 text-xs text-slate-700 flex items-center justify-between shadow-xs">
             <div className="flex items-center space-x-2.5">
-              <QrCode className="w-5 h-5 text-[#004481] shrink-0" />
+              <QrCode className="w-5 h-5 text-emerald-600 shrink-0" />
               <span>
-                <strong>Instrucciones:</strong> Escanea el código QR adherido a cada uno de los elementos de tu puesto de trabajo. Todos los activos son obligatorios para habilitar el inicio de sesión.
+                <strong>Instrucciones:</strong> Escanea el código QR de cada uno de los componentes de tu mesa de trabajo.
               </span>
             </div>
-            <span className="font-bold text-[#004481] bg-white px-2.5 py-1 rounded-lg border border-blue-200 shrink-0 ml-2">
+            <span className="font-bold text-slate-800 bg-slate-100 px-3 py-1 rounded-lg border border-slate-200">
               {completedCount} / {totalRequired}
             </span>
           </div>
 
-          {/* Cards Grid for Asset Slots */}
+          {/* Grid de slots de activos */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {requiredSlots.map(slot => {
               const reg = studentRegistrations.find(
@@ -341,128 +311,84 @@ export const StudentDashboard: React.FC = () => {
               return (
                 <div
                   key={slot.type}
-                  className={`rounded-2xl border transition-all duration-200 p-5 flex flex-col justify-between relative overflow-hidden bg-white shadow-xs ${
-                    isRegistered
-                      ? 'border-emerald-300 ring-2 ring-emerald-500/20'
-                      : 'border-slate-300 hover:border-blue-400'
+                  className={`rounded-2xl border transition-all p-5 flex flex-col justify-between bg-white shadow-sm ${
+                    isRegistered ? 'border-emerald-300' : 'border-red-200'
                   }`}
                 >
-                  {/* Status Indicator Pill */}
                   <div className="flex items-center justify-between mb-3">
                     <span
-                      className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full flex items-center space-x-1 ${
+                      className={`text-[11px] font-bold px-2.5 py-1 rounded-lg border ${
                         isRegistered
-                          ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
-                          : 'bg-red-100 text-red-800 border border-red-300'
+                          ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                          : 'bg-red-50 text-red-700 border-red-200'
                       }`}
                     >
-                      <span
-                        className={`w-1.5 h-1.5 rounded-full ${
-                          isRegistered ? 'bg-emerald-500' : 'bg-red-500 animate-ping'
-                        }`}
-                      />
-                      <span>{isRegistered ? 'Registrado 🟢' : 'Pendiente 🔴'}</span>
+                      {isRegistered ? '✓ Registrado' : '● Pendiente'}
                     </span>
 
                     {isRegistered && (
                       <button
                         onClick={() => eliminarRegistroActivo(reg.id)}
-                        title="Desvincular o re-escanear este activo"
-                        className="p-1 rounded text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+                        className="p-1 text-slate-400 hover:text-red-600 transition-colors"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
                     )}
                   </div>
 
-                  {/* Icon & Asset Name */}
                   <div className="flex items-center space-x-3 mb-3">
-                    <div
-                      className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-                        isRegistered
-                          ? 'bg-emerald-100 text-emerald-700'
-                          : 'bg-slate-100 text-slate-600'
-                      }`}
-                    >
+                    <div className="w-12 h-12 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700">
                       {slot.icon}
                     </div>
                     <div>
                       <h3 className="text-sm font-bold text-slate-900">{slot.label}</h3>
-                      <p className="text-[11px] text-slate-500">Slot obligatorio</p>
+                      <p className="text-[11px] text-slate-500">Requerido</p>
                     </div>
                   </div>
 
-                  {/* Body Info */}
-                  <div className="my-2 py-2 border-t border-b border-slate-100 min-h-[70px] text-xs">
+                  <div className="my-2 py-3 border-y border-slate-100 min-h-[65px] text-xs">
                     {isRegistered && assetDetails ? (
                       <div className="space-y-1">
-                        <div className="flex items-center justify-between">
-                          <span className="text-slate-500 text-[11px]">Código QR:</span>
+                        <div className="flex justify-between text-slate-600">
+                          <span className="text-slate-500">Código QR:</span>
                           <button
                             type="button"
                             onClick={() => setSelectedBadgeAsset(assetDetails)}
-                            className="font-mono font-bold text-[#004481] hover:underline flex items-center gap-1"
+                            className="font-mono font-bold text-emerald-600 hover:underline flex items-center gap-1"
                           >
                             <span>{reg.id_activo}</span>
                             <ExternalLink className="w-3 h-3 text-slate-400" />
                           </button>
                         </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-slate-500 text-[11px]">Marca:</span>
-                          <span className="font-semibold text-slate-800 truncate max-w-[140px]">
-                            {assetDetails.marca}
-                          </span>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-slate-500 text-[11px]">Serial:</span>
-                          <span className="font-mono text-slate-600 text-[10px] truncate max-w-[130px]">
-                            {assetDetails.serial}
-                          </span>
-                        </div>
-                        <div className="flex items-center justify-between text-[10px] text-slate-400 pt-1">
-                          <span>Hora de escaneo:</span>
-                          <span>{reg.fecha_hora_registro.split('T')[1]?.substring(0, 5) || '10:05'}</span>
+                        <div className="flex justify-between text-slate-600">
+                          <span className="text-slate-500">Marca:</span>
+                          <span className="font-semibold text-slate-800">{assetDetails.marca}</span>
                         </div>
                       </div>
                     ) : (
-                      <div className="flex flex-col items-center justify-center h-full text-center text-slate-400 space-y-1 py-1">
-                        <QrCode className="w-6 h-6 text-slate-300" />
-                        <span className="text-[11px]">Activo no escaneado</span>
+                      <div className="flex items-center justify-center text-red-500 h-full text-xs font-semibold">
+                        Pendiente por registrar
                       </div>
                     )}
                   </div>
 
-                  {/* Scan Button Action */}
                   <div className="mt-2 pt-1">
                     {isRegistered ? (
-                      <div className="flex space-x-1.5">
-                        <button
-                          type="button"
-                          onClick={() => handleOpenScanner(slot.type)}
-                          className="flex-1 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold transition-colors flex items-center justify-center space-x-1 cursor-pointer"
-                        >
-                          <RotateCcw className="w-3 h-3 text-slate-500" />
-                          <span>Re-escanear</span>
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setReportTargetQr(reg.id_activo);
-                            setReportModalOpen(true);
-                          }}
-                          title="Reportar novedad en este activo"
-                          className="p-2 bg-amber-50 hover:bg-amber-100 text-amber-700 rounded-xl border border-amber-200 transition-colors"
-                        >
-                          <ShieldAlert className="w-4 h-4" />
-                        </button>
-                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleOpenScanner(slot.type)}
+                        className="w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold border border-slate-200 transition-colors flex items-center justify-center space-x-1"
+                      >
+                        <RotateCcw className="w-3.5 h-3.5 text-slate-500" />
+                        <span>Re-escanear</span>
+                      </button>
                     ) : (
                       <button
                         type="button"
                         onClick={() => handleOpenScanner(slot.type)}
-                        className="w-full py-2.5 bg-[#004481] hover:bg-[#003366] text-white rounded-xl text-xs font-bold transition-all shadow-sm flex items-center justify-center space-x-2 group cursor-pointer"
+                        className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-all flex items-center justify-center space-x-2 shadow-sm cursor-pointer"
                       >
-                        <QrCode className="w-4 h-4 text-[#F9A800] group-hover:rotate-12 transition-transform" />
+                        <QrCode className="w-4 h-4" />
                         <span>Escanear QR</span>
                       </button>
                     )}
@@ -472,191 +398,130 @@ export const StudentDashboard: React.FC = () => {
             })}
           </div>
 
-          {/* Action Center Footer: Start Class / Change Workstation / Finalize Class */}
-          <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200 flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="space-y-1 text-center md:text-left">
-              <h4 className="font-bold text-slate-900 text-sm">Acciones de Sesión del Aprendiz</h4>
+          {/* Acciones de pie de página */}
+          <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+            <div>
+              <h4 className="font-bold text-slate-900 text-sm">Estado General</h4>
               <p className="text-xs text-slate-500">
-                {isComplete
-                  ? 'Todos tus activos están validados. Puedes trabajar normalmente en tu puesto.'
-                  : 'Registra los activos faltantes para desbloquear el inicio completo de la clase.'}
+                {isComplete ? 'Todos tus activos han sido registrados satisfactoriamente.' : 'Escanea los elementos pendientes para habilitar el puesto.'}
               </p>
             </div>
 
-            <div className="flex flex-wrap items-center gap-3 w-full md:w-auto justify-center">
-              {/* Request Workstation Change Button */}
+            <div className="flex flex-wrap items-center gap-3">
               <button
                 type="button"
                 onClick={() => setShowChangeRequestModal(true)}
-                className="px-4 py-2.5 bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 rounded-xl text-xs font-semibold transition-colors flex items-center space-x-1.5"
+                className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 rounded-xl text-xs font-semibold transition-colors"
               >
-                <RotateCcw className="w-3.5 h-3.5 text-[#004481]" />
-                <span>Solicitar Cambio de Puesto</span>
+                Solicitar Cambio de Puesto
               </button>
 
-              {/* Finalize Class / Return Workstation */}
               <button
                 type="button"
                 disabled={!isComplete}
                 onClick={() => setShowFinalizeModal(true)}
-                className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 ${
+                className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all ${
                   isComplete
-                    ? 'bg-amber-600 hover:bg-amber-700 text-white shadow-md cursor-pointer'
-                    : 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                    ? 'bg-amber-600 hover:bg-amber-500 text-white cursor-pointer shadow-sm'
+                    : 'bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed'
                 }`}
               >
-                <CheckSquare className="w-4 h-4" />
-                <span>Finalizar y Entregar Puesto</span>
+                Entregar Puesto
               </button>
 
-              {/* Start Session Confirmation */}
               <button
                 type="button"
                 disabled={!isComplete}
                 onClick={() => {
                   setScanToast({
                     success: true,
-                    message: '¡Puesto de trabajo confirmado! Tu registro quedó asentado en la lista del instructor.'
+                    message: '¡Puesto de trabajo verificado con éxito!'
                   });
                   setTimeout(() => setScanToast(null), 4000);
                 }}
-                className={`px-6 py-2.5 rounded-xl text-xs font-bold transition-all shadow-md flex items-center space-x-2 ${
+                className={`px-6 py-2.5 rounded-xl text-xs font-bold transition-all ${
                   isComplete
-                    ? 'bg-emerald-600 hover:bg-emerald-700 text-white cursor-pointer'
-                    : 'bg-slate-300 text-slate-500 cursor-not-allowed'
+                    ? 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm cursor-pointer'
+                    : 'bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed'
                 }`}
               >
-                <CheckCircle2 className="w-4 h-4 text-white" />
-                <span>{isComplete ? 'Puesto Verificado y Activo' : 'Completar Escaneo para Iniciar'}</span>
+                {isComplete ? 'Puesto Completo' : 'Incompleto'}
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* TAB 2: MY HISTORY */}
+      {/* TAB 2: HISTORIAL */}
       {activeTab === 'historial' && (
-        <div className="space-y-4">
-          <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs">
-            <h3 className="text-base font-bold text-slate-900 mb-1">
-              Historial de Clases y Activos Registrados
-            </h3>
-            <p className="text-xs text-slate-500 mb-4">
-              Trazabilidad de puestos ocupados, fechas, instructores y estado de devolución de activos.
-            </p>
+        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+          <h3 className="text-base font-bold text-slate-900 mb-1">Historial de Registros</h3>
+          <p className="text-xs text-slate-500 mb-4">Registro histórico de tus escaneos de equipo.</p>
 
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs border-collapse">
-                <thead>
-                  <tr className="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
-                    <th className="py-3 px-4">Clase / Fecha</th>
-                    <th className="py-3 px-4">Ambiente</th>
-                    <th className="py-3 px-4">Activo Escaneado</th>
-                    <th className="py-3 px-4">Tipo</th>
-                    <th className="py-3 px-4">Estado Entrega</th>
-                    <th className="py-3 px-4">Estado Devolución</th>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs">
+              <thead>
+                <tr className="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
+                  <th className="py-3 px-4">Clase / Fecha</th>
+                  <th className="py-3 px-4">Activo</th>
+                  <th className="py-3 px-4">Tipo</th>
+                  <th className="py-3 px-4">Estado</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {pastRegistrations.map(reg => (
+                  <tr key={reg.id} className="hover:bg-slate-50">
+                    <td className="py-3 px-4 font-semibold text-slate-800">
+                      Clase #{reg.id_clase}
+                      <div className="text-[10px] text-slate-400">{reg.fecha_hora_registro.split('T')[0]}</div>
+                    </td>
+                    <td className="py-3 px-4 font-mono font-bold text-emerald-600">{reg.id_activo}</td>
+                    <td className="py-3 px-4 text-slate-600">{reg.tipo_activo}</td>
+                    <td className="py-3 px-4">
+                      <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold px-2 py-0.5 rounded-md">
+                        {reg.estado_entrega}
+                      </span>
+                    </td>
                   </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100">
-                  {pastRegistrations.map(reg => {
-                    const act = activos.find(a => a.codigo_qr === reg.id_activo);
-                    return (
-                      <tr key={reg.id} className="hover:bg-slate-50">
-                        <td className="py-3 px-4 font-semibold text-slate-900">
-                          <div>Clase #{reg.id_clase}</div>
-                          <div className="text-[10px] text-slate-400">{reg.fecha_hora_registro.split('T')[0]}</div>
-                        </td>
-                        <td className="py-3 px-4 text-slate-700">
-                          {activeAmbiente ? activeAmbiente.nombre.split('-')[0] : 'Ambiente 101'}
-                        </td>
-                        <td className="py-3 px-4">
-                          <button
-                            onClick={() => act && setSelectedBadgeAsset(act)}
-                            className="font-mono font-bold text-[#004481] hover:underline"
-                          >
-                            {reg.id_activo}
-                          </button>
-                          <div className="text-[10px] text-slate-500">{act?.marca}</div>
-                        </td>
-                        <td className="py-3 px-4 text-slate-700 font-medium">{reg.tipo_activo}</td>
-                        <td className="py-3 px-4">
-                          <span className="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full">
-                            {reg.estado_entrega}
-                          </span>
-                        </td>
-                        <td className="py-3 px-4">
-                          <span
-                            className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                              reg.estado_devolucion === 'Excelente'
-                                ? 'bg-emerald-100 text-emerald-800'
-                                : 'bg-slate-100 text-slate-700'
-                            }`}
-                          >
-                            {reg.estado_devolucion || 'En Curso'}
-                          </span>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       )}
 
-      {/* MODAL: SOLICITAR CAMBIO DE PUESTO */}
+      {/* MODAL: CAMBIO DE PUESTO */}
       {showChangeRequestModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-150">
-            <h3 className="font-bold text-slate-900 text-base mb-1">
-              Solicitud de Cambio de Puesto de Trabajo
-            </h3>
-            <p className="text-xs text-slate-500 mb-4">
-              Esta solicitud será enviada al panel del instructor ({instructor?.nombre || 'Carlos Ramírez'}) para su autorización en vivo.
-            </p>
-
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6 border border-slate-200 shadow-xl space-y-4">
+            <h3 className="font-bold text-slate-900 text-base">Solicitar Cambio de Puesto</h3>
             <form onSubmit={handleSendChangeRequest} className="space-y-4 text-xs">
               <div>
-                <label className="block font-bold text-slate-700 mb-1">Motivo del Cambio</label>
+                <label className="block font-bold text-slate-700 mb-1">Motivo</label>
                 <select
                   value={motivoCambio}
                   onChange={e => setMotivoCambio(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-[#004481] focus:outline-none"
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 text-slate-800 rounded-xl focus:outline-none"
                 >
-                  <option value="Equipo no enciende / Problema de hardware">
-                    Equipo no enciende / Problema de hardware
-                  </option>
+                  <option value="Equipo no enciende / Problema de hardware">Equipo no enciende / Problema de hardware</option>
                   <option value="Monitor parpadea o sin señal">Monitor parpadea o sin señal</option>
-                  <option value="Periféricos (teclado/mouse) averiados">
-                    Periféricos (teclado/mouse) averiados
-                  </option>
-                  <option value="Reubicación por requerimiento del instructor">
-                    Reubicación por requerimiento del instructor
-                  </option>
-                  <option value="Otro motivo de ergonomía o conectividad">
-                    Otro motivo de ergonomía o conectividad
-                  </option>
+                  <option value="Periféricos (teclado/mouse) averiados">Periféricos averiados</option>
                 </select>
-              </div>
-
-              <div className="p-3 bg-amber-50 rounded-xl border border-amber-200 text-amber-800 text-[11px]">
-                ⚠️ Al ser autorizado, tus activos actuales serán desvinculados para que puedas escanear los del nuevo puesto.
               </div>
 
               <div className="flex items-center justify-end space-x-2 pt-2 border-t border-slate-100">
                 <button
                   type="button"
                   onClick={() => setShowChangeRequestModal(false)}
-                  className="px-3 py-2 text-slate-600 hover:bg-slate-100 rounded-xl font-medium"
+                  className="px-3 py-2 text-slate-500 hover:bg-slate-100 rounded-xl"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-[#004481] hover:bg-blue-900 text-white rounded-xl font-bold transition-colors shadow-sm"
+                  className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold shadow-sm"
                 >
-                  Enviar Solicitud al Instructor
+                  Enviar Solicitud
                 </button>
               </div>
             </form>
@@ -664,30 +529,24 @@ export const StudentDashboard: React.FC = () => {
         </div>
       )}
 
-      {/* MODAL: FINALIZAR CLASE APRENDIZ */}
+      {/* MODAL: FINALIZAR SESIÓN */}
       {showFinalizeModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-150">
-            <h3 className="font-bold text-slate-900 text-base mb-1">
-              Finalización de Sesión y Devolución de Activos
-            </h3>
-            <p className="text-xs text-slate-500 mb-4">
-              Confirma el estado en el que dejas los {completedCount} activos de tu estación de trabajo.
-            </p>
-
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6 border border-slate-200 shadow-xl space-y-4">
+            <h3 className="font-bold text-slate-900 text-base">Entrega de Puesto</h3>
             <form onSubmit={handleFinalizeSessionSubmit} className="space-y-4 text-xs">
               <div>
-                <label className="block font-bold text-slate-700 mb-1">Estado de Devolución</label>
+                <label className="block font-bold text-slate-700 mb-1">Estado al entregar</label>
                 <div className="grid grid-cols-3 gap-2">
                   {(['Excelente', 'Bueno', 'Con Novedad'] as const).map(est => (
                     <button
                       key={est}
                       type="button"
                       onClick={() => setEstadoDevolucion(est)}
-                      className={`p-2 rounded-xl border text-center font-bold text-xs transition-all ${
+                      className={`p-2 rounded-xl border font-bold text-xs transition-all ${
                         estadoDevolucion === est
-                          ? 'bg-[#004481] text-white border-[#004481]'
-                          : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+                          ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm'
+                          : 'bg-slate-50 text-slate-700 border-slate-200'
                       }`}
                     >
                       {est}
@@ -696,32 +555,19 @@ export const StudentDashboard: React.FC = () => {
                 </div>
               </div>
 
-              <div>
-                <label className="block font-bold text-slate-700 mb-1">
-                  Observaciones de Entrega (Opcional)
-                </label>
-                <textarea
-                  rows={3}
-                  value={observacionesFinal}
-                  onChange={e => setObservacionesFinal(e.target.value)}
-                  placeholder="Ejemplo: Computador apagado, puesto organizado, mouse y teclado limpios."
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-[#004481] focus:outline-none resize-none"
-                />
-              </div>
-
               <div className="flex items-center justify-end space-x-2 pt-2 border-t border-slate-100">
                 <button
                   type="button"
                   onClick={() => setShowFinalizeModal(false)}
-                  className="px-3 py-2 text-slate-600 hover:bg-slate-100 rounded-xl font-medium"
+                  className="px-3 py-2 text-slate-500 hover:bg-slate-100 rounded-xl"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold transition-colors shadow-sm"
+                  className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold shadow-sm"
                 >
-                  Confirmar Entrega de Puesto
+                  Confirmar Entrega
                 </button>
               </div>
             </form>
@@ -729,21 +575,14 @@ export const StudentDashboard: React.FC = () => {
         </div>
       )}
 
-      {/* QR SCANNER MODAL */}
+      {/* MODALES EXTERNOS */}
       <QRScannerModal
         isOpen={scannerOpen}
         onClose={() => setScannerOpen(false)}
         targetType={targetType}
         onScanned={handleScannedResult}
       />
-
-      {/* QR BADGE MODAL */}
-      <QRBadgeModal
-        activo={selectedBadgeAsset}
-        onClose={() => setSelectedBadgeAsset(null)}
-      />
-
-      {/* REPORT NOVEDAD MODAL */}
+      <QRBadgeModal activo={selectedBadgeAsset} onClose={() => setSelectedBadgeAsset(null)} />
       <ReportNovedadModal
         isOpen={reportModalOpen}
         onClose={() => setReportModalOpen(false)}

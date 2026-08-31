@@ -18,7 +18,7 @@ export const QRBadgeModal: React.FC<QRBadgeModalProps> = ({ activo, onClose }) =
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-xs">
       <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-150">
         <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-          <div className="flex items-center space-x-2 text-[#004481]">
+          <div className="flex items-center space-x-2 text-brand-900">
             <Tag className="w-5 h-5" />
             <h3 className="font-bold text-slate-900">Etiqueta Institucional de Activo</h3>
           </div>
@@ -34,7 +34,7 @@ export const QRBadgeModal: React.FC<QRBadgeModalProps> = ({ activo, onClose }) =
         <div id="printable-qr-badge" className="my-5 p-5 bg-slate-50 border-2 border-dashed border-slate-300 rounded-2xl text-center flex flex-col items-center">
           {/* Header Tag */}
           <div className="flex items-center justify-between w-full px-2 pb-3 border-b border-slate-200 text-xs">
-            <span className="font-black text-[#004481] tracking-wider">SIGEA • INSTITUTO</span>
+            <span className="font-black text-brand-900 tracking-wider">SIGEA • INSTITUTO</span>
             <span className="text-[10px] font-bold uppercase bg-amber-100 text-amber-900 px-2 py-0.5 rounded">
               Inventario Activo
             </span>
@@ -67,8 +67,8 @@ export const QRBadgeModal: React.FC<QRBadgeModalProps> = ({ activo, onClose }) =
               <rect x="22" y="50" width="6" height="6" />
               <rect x="30" y="42" width="6" height="6" />
 
-              <rect x="42" y="42" width="16" height="16" rx="2" fill="#004481" />
-              <rect x="46" y="46" width="8" height="8" fill="#F9A800" />
+              <rect x="42" y="42" width="16" height="16" rx="2" fill="#13223B" />
+              <rect x="46" y="46" width="8" height="8" fill="#468F7B" />
 
               <rect x="65" y="42" width="6" height="6" />
               <rect x="75" y="50" width="6" height="6" />
@@ -81,7 +81,7 @@ export const QRBadgeModal: React.FC<QRBadgeModalProps> = ({ activo, onClose }) =
               <rect x="65" y="65" width="10" height="10" />
               <rect x="80" y="80" width="12" height="12" />
             </svg>
-            <span className="font-mono font-black text-sm text-[#004481] tracking-widest mt-2">
+            <span className="font-mono font-black text-sm text-brand-900 tracking-widest mt-2">
               {activo.codigo_qr}
             </span>
           </div>
@@ -103,7 +103,7 @@ export const QRBadgeModal: React.FC<QRBadgeModalProps> = ({ activo, onClose }) =
             {activo.puestoNumero && (
               <div className="flex justify-between border-t border-slate-100 pt-1">
                 <span className="text-slate-500 font-medium">Puesto Sugerido:</span>
-                <span className="font-bold text-[#004481]">Puesto {activo.puestoNumero}</span>
+                <span className="font-bold text-brand-900">Puesto {activo.puestoNumero}</span>
               </div>
             )}
           </div>
@@ -126,9 +126,9 @@ export const QRBadgeModal: React.FC<QRBadgeModalProps> = ({ activo, onClose }) =
             <button
               type="button"
               onClick={handlePrint}
-              className="flex items-center space-x-1.5 px-3 py-1.5 text-xs bg-[#004481] hover:bg-blue-900 text-white rounded-lg transition-colors font-semibold shadow-xs"
+              className="flex items-center space-x-1.5 px-3 py-1.5 text-xs bg-brand-900 hover:bg-brand-800 text-white rounded-lg transition-colors font-semibold shadow-xs"
             >
-              <Printer className="w-3.5 h-3.5 text-[#F9A800]" />
+              <Printer className="w-3.5 h-3.5 text-brand-400" />
               <span>Imprimir Etiqueta</span>
             </button>
           </div>

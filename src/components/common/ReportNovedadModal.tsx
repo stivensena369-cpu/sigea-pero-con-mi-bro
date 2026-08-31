@@ -80,7 +80,7 @@ export const ReportNovedadModal: React.FC<ReportNovedadModalProps> = ({
                 value={codigoQr}
                 onChange={e => setCodigoQr(e.target.value.toUpperCase())}
                 placeholder="Ejemplo: QR-MON-001 o QR-TEC-002"
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl font-mono text-xs focus:ring-2 focus:ring-[#004481] focus:outline-none"
+                className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl font-mono text-xs focus:ring-2 focus:ring-brand-700 focus:outline-none"
               />
             </div>
 
@@ -90,7 +90,7 @@ export const ReportNovedadModal: React.FC<ReportNovedadModalProps> = ({
                 <select
                   value={tipoNovedad}
                   onChange={e => setTipoNovedad(e.target.value as any)}
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-[#004481] focus:outline-none"
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-700 focus:outline-none"
                 >
                   <option value="Fallo Físico">Fallo Físico (Rotura/Golpe)</option>
                   <option value="Fallo Eléctrico">Fallo Eléctrico / No Enciende</option>
@@ -105,7 +105,7 @@ export const ReportNovedadModal: React.FC<ReportNovedadModalProps> = ({
                 <select
                   value={prioridad}
                   onChange={e => setPrioridad(e.target.value as any)}
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-[#004481] focus:outline-none font-semibold text-slate-800"
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-700 focus:outline-none font-semibold text-slate-800"
                 >
                   <option value="Baja">Baja (Funciona con detalle)</option>
                   <option value="Media">Media (Afecta ergonomía)</option>
@@ -125,7 +125,7 @@ export const ReportNovedadModal: React.FC<ReportNovedadModalProps> = ({
                 value={descripcion}
                 onChange={e => setDescripcion(e.target.value)}
                 placeholder="Indica qué ocurre con el equipo (ej. la pantalla parpadea, no reconoce clic derecho, tecla trabada...)"
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-[#004481] focus:outline-none resize-none"
+                className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-700 focus:outline-none resize-none"
               />
             </div>
 
