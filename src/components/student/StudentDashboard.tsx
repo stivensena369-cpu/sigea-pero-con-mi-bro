@@ -401,9 +401,9 @@ export const StudentDashboard: React.FC = () => {
           {/* Acciones de pie de página */}
           <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
             <div>
-              <h4 className="font-bold text-slate-900 text-sm">Estado General</h4>
+              <h4 className="font-bold text-slate-900 text-sm">Acciones de Sesión del Aprendiz</h4>
               <p className="text-xs text-slate-500">
-                {isComplete ? 'Todos tus activos han sido registrados satisfactoriamente.' : 'Escanea los elementos pendientes para habilitar el puesto.'}
+                {isComplete ? 'Todos tus activos están validados. Puedes trabajar normalmente en tu puesto.' : 'Escanea los elementos pendientes para habilitar el puesto.'}
               </p>
             </div>
 
@@ -411,22 +411,24 @@ export const StudentDashboard: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setShowChangeRequestModal(true)}
-                className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 rounded-xl text-xs font-semibold transition-colors"
+                className="px-4 py-2.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 rounded-xl text-xs font-semibold transition-colors flex items-center gap-2 shadow-xs cursor-pointer"
               >
-                Solicitar Cambio de Puesto
+               <RotateCcw className="w-3.5 h-3.5 text-slate-500" /> 
+               <span> Solicitud de Cambio de Puesto de Trabajo </span>
               </button>
 
               <button
                 type="button"
                 disabled={!isComplete}
                 onClick={() => setShowFinalizeModal(true)}
-                className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all ${
+                className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
                   isComplete
                     ? 'bg-amber-600 hover:bg-amber-500 text-white cursor-pointer shadow-sm'
                     : 'bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed'
                 }`}
               >
-                Entregar Puesto
+                <CheckSquare className="w-4 h-4" />
+                <span>Finalizar y Entregar Puesto</span>
               </button>
 
               <button
@@ -439,13 +441,14 @@ export const StudentDashboard: React.FC = () => {
                   });
                   setTimeout(() => setScanToast(null), 4000);
                 }}
-                className={`px-6 py-2.5 rounded-xl text-xs font-bold transition-all ${
+                className={`px-5 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
                   isComplete
                     ? 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm cursor-pointer'
                     : 'bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed'
                 }`}
               >
-                {isComplete ? 'Puesto Completo' : 'Incompleto'}
+                <CheckCircle2 className="w-4 h-4" />
+                <span>{isComplete ? 'Puesto Verificado y Activo' : 'Puesto Incompleto'}</span>
               </button>
             </div>
           </div>
@@ -493,60 +496,80 @@ export const StudentDashboard: React.FC = () => {
       {/* MODAL: CAMBIO DE PUESTO */}
       {showChangeRequestModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 border border-slate-200 shadow-xl space-y-4">
-            <h3 className="font-bold text-slate-900 text-base">Solicitar Cambio de Puesto</h3>
-            <form onSubmit={handleSendChangeRequest} className="space-y-4 text-xs">
+          <div className="bg-white rounded-3xl max-w-lg w-full p-7 border border-slate-100 shadow-xl space-y-5">
+            <div>
+              <h3 className="font-bold text-slate-900 text-lg">Solicitud de Cambio de Puesto de Trabajo</h3>
+              <p className="text-xs text-slate-500 mt-1.5">
+               Esta solicitud será enviada al panel del instructor (Carlos) para su autorización en vivo 
+              </p>
+             </div> 
+
+              <form onSubmit={handleSendChangeRequest} className="space-y-4 text-xs">
               <div>
-                <label className="block font-bold text-slate-700 mb-1">Motivo</label>
+               <label className="block font-bold text-slate-800 mb-2">Motivo del Cambio</label>
                 <select
                   value={motivoCambio}
                   onChange={e => setMotivoCambio(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 text-slate-800 rounded-xl focus:outline-none"
+                  className="w-full p-3.5 bg-slate-50 border border-slate-200 text-slate-800 rounded-2xl focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 cursor-pointer"
                 >
                   <option value="Equipo no enciende / Problema de hardware">Equipo no enciende / Problema de hardware</option>
                   <option value="Monitor parpadea o sin señal">Monitor parpadea o sin señal</option>
-                  <option value="Periféricos (teclado/mouse) averiados">Periféricos averiados</option>
+                  <option value="Periféricos (teclado/mouse) averiados">Periféricos (teclado/mouse) averiados</option>
+                  <option value="Reubicación por requerimiento del instructor">Reubicación por requerimiento del instructor</option>
+                  <option value="Otro motivo de ergonomía o conectividad">Otro motivo de ergonomía o conectividad</option>
                 </select>
               </div>
 
-              <div className="flex items-center justify-end space-x-2 pt-2 border-t border-slate-100">
+              {/* Banner de advertencia amarillo */}
+              <div className="p-4 bg-amber-50/70 border border-amber-200/80 rounded-2xl flex items-start gap-2.5">
+                <span className="text-amber-600 text-sm">⚠️</span>
+                <p className="text-[11px] font-semibold text-amber-800/90 leading-relaxed">
+                  Al ser autorizado, tus activos actuales serán desvinculados para que puedas escanear los del nuevo puesto.
+                </p>
+              </div>
+
+              <div className="flex items-center justify-end space-x-3 pt-4 border-t border-slate-100">
                 <button
                   type="button"
                   onClick={() => setShowChangeRequestModal(false)}
-                  className="px-3 py-2 text-slate-500 hover:bg-slate-100 rounded-xl"
+                  className="px-5 py-2.5 text-slate-600 font-bold hover:bg-slate-100 rounded-2xl cursor-pointer transition-colors"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold shadow-sm"
+                  className="px-6 py-2.5 bg-[#009b63] hover:bg-[#008756] text-white rounded-2xl font-bold shadow-sm cursor-pointer transition-colors"
                 >
-                  Enviar Solicitud
+                  Enviar Solicitud al Instructor
                 </button>
               </div>
             </form>
           </div>
         </div>
       )}
+          
 
       {/* MODAL: FINALIZAR SESIÓN */}
       {showFinalizeModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 border border-slate-200 shadow-xl space-y-4">
-            <h3 className="font-bold text-slate-900 text-base">Entrega de Puesto</h3>
+          <div className="bg-white rounded-2xl max-w-lg w-full p-6 border border-slate-200 shadow-xl space-y-5">
+            <h3 className="font-bold text-slate-900 text-base">Finalización de Sesión y Devolución de Activos</h3>
             <form onSubmit={handleFinalizeSessionSubmit} className="space-y-4 text-xs">
-              <div>
-                <label className="block font-bold text-slate-700 mb-1">Estado al entregar</label>
+              <p className="text-xs text-slate-500 mt-1">
+                Confirma el estado en el que dejas los {studentRegistrations.length || 4} activos de tu estación de trabajo.
+              </p>
+            <div>
+                <label className="block font-bold text-slate-700 mb-2">Estado de Devolución</label>
                 <div className="grid grid-cols-3 gap-2">
                   {(['Excelente', 'Bueno', 'Con Novedad'] as const).map(est => (
                     <button
                       key={est}
                       type="button"
                       onClick={() => setEstadoDevolucion(est)}
-                      className={`p-2 rounded-xl border font-bold text-xs transition-all ${
+                      className={`py-2.5 px-3 rounded-xl border font-bold text-xs transition-all cursor-pointer ${
                         estadoDevolucion === est
                           ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm'
-                          : 'bg-slate-50 text-slate-700 border-slate-200'
+                          : 'bg-slate-100/80 text-slate-700 border-slate-200 hover:bg-slate-100'
                       }`}
                     >
                       {est}
@@ -555,11 +578,24 @@ export const StudentDashboard: React.FC = () => {
                 </div>
               </div>
 
-              <div className="flex items-center justify-end space-x-2 pt-2 border-t border-slate-100">
+            <div>
+              <label className="block font-bold text-slate-700 mb-1">
+                Observaciones de Entrega <span className="font-normal text-slate-400">(Opcional)</span>
+              </label>
+              <textarea
+                rows={3}
+                value={observacionesFinal}
+                onChange={(e: any) => setObservacionesFinal(e.target.value)}
+                placeholder="Ejemplo: Computador apagado, puesto organizado, mouse y teclado limpios."
+                className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 resize-none"
+              />
+              </div>
+
+              <div className="flex items-center justify-end space-x-3 pt-3 border-t border-slate-100">
                 <button
                   type="button"
                   onClick={() => setShowFinalizeModal(false)}
-                  className="px-3 py-2 text-slate-500 hover:bg-slate-100 rounded-xl"
+                  className="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-2xl cursor-pointer transition-colors"
                 >
                   Cancelar
                 </button>
@@ -567,7 +603,7 @@ export const StudentDashboard: React.FC = () => {
                   type="submit"
                   className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold shadow-sm"
                 >
-                  Confirmar Entrega
+                  Confirmar Entrega del puesto
                 </button>
               </div>
             </form>

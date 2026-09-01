@@ -61,9 +61,6 @@ export const Header: React.FC<HeaderProps> = ({ onOpenResetModal, onOpenQrModal 
             <div>
               <div className="flex items-center space-x-2">
                 <span className="font-bold text-lg tracking-tight text-white">SIGEA</span>
-                <span className="text-[10px] uppercase font-semibold tracking-wider bg-[#468F7B] text-white px-2 py-0.5 rounded-full shadow-sm">
-                  Prototipo MVP
-                </span>
               </div>
               <p className="text-xs text-[#94A3B8] hidden sm:block">
                 Sistema Integral de Gestión de Entornos y Activos
