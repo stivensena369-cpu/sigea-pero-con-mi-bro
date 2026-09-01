@@ -287,14 +287,14 @@ export const StudentDashboard: React.FC = () => {
       {/* TAB 1: REGISTRO DE PUESTO */}
       {activeTab === 'registro' && (
         <div className="space-y-6">
-          <div className="bg-white border border-slate-200 rounded-xl p-3.5 text-xs text-slate-700 flex items-center justify-between shadow-xs">
-            <div className="flex items-center space-x-2.5">
+          <div className="bg-white border border-slate-200 rounded-xl p-3.5 text-xs text-slate-700 flex items-center justify-between gap-4 shadow-xs">
+            <div className="flex items-center space-x-2.5 min-w-0">
               <QrCode className="w-5 h-5 text-emerald-600 shrink-0" />
-              <span>
-                <strong>Instrucciones:</strong> Escanea el código QR de cada uno de los componentes de tu mesa de trabajo.
+              <span className="leading-relaxed">
+                <strong>Instrucciones:</strong> Escanea el codigo QR adherido a cada uno de los elementos de tu puesto de trabajo. Todos los activos son obligatorios para habilitar el inicio de sesión.
               </span>
             </div>
-            <span className="font-bold text-slate-800 bg-slate-100 px-3 py-1 rounded-lg border border-slate-200">
+            <span className="shrink-0 flex items-center justify-center min-w-[52px] font-bold text-slate-800 bg-slate-100 px-3 py-1 rounded-lg border border-slate-200">
               {completedCount} / {totalRequired}
             </span>
           </div>
