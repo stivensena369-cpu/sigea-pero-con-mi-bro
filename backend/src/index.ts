@@ -2,6 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { pool } from './database/db';
+import activoRoutes from './routes/activoRoutes';
+import usuarioRoutes from './routes/usuarioRoutes';
 
 dotenv.config();
 
@@ -23,6 +25,9 @@ app.get('/api/db-check', async (req, res) => {
     res.status(500).json({ conectado: false, error: String(error) });
   }
 });
+
+app.use('/api/activos', activoRoutes);
+app.use('/api/usuarios', usuarioRoutes);
 
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
