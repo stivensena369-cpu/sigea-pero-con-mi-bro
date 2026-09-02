@@ -138,7 +138,7 @@ export const InstructorDashboard: React.FC = () => {
         <div className="bg-gradient-to-r from-brand-900 via-brand-800 to-brand-700 rounded-2xl p-6 text-white shadow-xl relative overflow-hidden">
           <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
             <div className="space-y-2">
-              <div className="flex items-center space-x-2 text-xs">
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs">
                 <span className="bg-emerald-500 text-white font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider text-[10px]">
                   Panel de Control del Instructor
                 </span>
@@ -211,8 +211,8 @@ export const InstructorDashboard: React.FC = () => {
       )}
 
       {/* Navigation Tabs */}
-      <div className="flex items-center justify-between border-b border-slate-200 pb-2">
-        <div className="flex space-x-2">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-slate-200 pb-2 gap-3">
+        <div className="flex flex-wrap gap-2">
           <button
             onClick={() => setActiveTab('monitoreo')}
             className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all ${
@@ -275,10 +275,10 @@ export const InstructorDashboard: React.FC = () => {
             setReportTargetQr('');
             setReportModalOpen(true);
           }}
-          className="flex items-center space-x-1.5 text-xs text-red-800 bg-red-50 hover:bg-red-100 border border-red-300 px-3 py-1.5 rounded-xl font-semibold transition-colors"
+          className="flex items-center justify-center space-x-1.5 text-xs text-red-800 bg-red-50 hover:bg-red-100 border border-red-300 px-3 py-1.5 rounded-xl font-semibold transition-colors self-start sm:self-auto"
         >
           <ShieldAlert className="w-3.5 h-3.5 text-red-600" />
-          <span className="hidden sm:inline">Reportar Daño / Falla</span>
+          <span>Reportar Daño / Falla</span>
         </button>
       </div>
 
@@ -298,7 +298,7 @@ export const InstructorDashboard: React.FC = () => {
               />
             </div>
 
-            <div className="flex items-center space-x-2 text-xs text-slate-500">
+            <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500">
               <span className="font-semibold text-slate-700">Leyenda:</span>
               <span className="flex items-center gap-1 text-emerald-700 font-medium">
                 <span className="w-2 h-2 rounded-full bg-emerald-500" /> Puesto Completo
@@ -537,7 +537,7 @@ export const InstructorDashboard: React.FC = () => {
               {solicitudesCambio.map(sol => {
                 const student = users.find(u => u.documento === sol.aprendizDoc);
                 return (
-                  <div key={sol.id} className="py-4 flex items-center justify-between text-xs">
+                  <div key={sol.id} className="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
                     <div>
                       <div className="flex items-center space-x-2">
                         <span className="font-bold text-slate-900 text-sm">
@@ -565,7 +565,7 @@ export const InstructorDashboard: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => handleAuthorizeChange(sol.aprendizDoc)}
-                        className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold transition-colors shadow-xs"
+                        className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold transition-colors shadow-xs shrink-0"
                       >
                         Autorizar Cambio Ahora
                       </button>
@@ -591,11 +591,11 @@ export const InstructorDashboard: React.FC = () => {
           <div className="space-y-3">
             {/* Class 2 Finalized Demo */}
             <div className="p-4 rounded-xl border border-slate-200 bg-slate-50 text-xs space-y-2">
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <span className="font-bold text-slate-900 text-sm">
                   Clase #2: Bases de Datos Relacionales y Normalización
                 </span>
-                <span className="bg-slate-200 text-slate-800 text-[10px] font-bold px-2 py-0.5 rounded-full">
+                <span className="bg-slate-200 text-slate-800 text-[10px] font-bold px-2 py-0.5 rounded-full self-start sm:self-auto">
                   Finalizada ✓
                 </span>
               </div>
@@ -624,7 +624,7 @@ export const InstructorDashboard: React.FC = () => {
       {/* TAB 4: ROOM NOVEDADES & INCIDENTS */}
       {activeTab === 'novedades' && (
         <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs space-y-4">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <h3 className="text-base font-bold text-slate-900">
                 Novedades y Averías Reportadas en el Ambiente
@@ -639,7 +639,7 @@ export const InstructorDashboard: React.FC = () => {
                 setReportTargetQr('');
                 setReportModalOpen(true);
               }}
-              className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-colors"
+              className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-colors self-start sm:self-auto"
             >
               + Nuevo Reporte
             </button>
@@ -647,9 +647,9 @@ export const InstructorDashboard: React.FC = () => {
 
           <div className="space-y-2">
             {novedades.map(nov => (
-              <div key={nov.id} className="p-3.5 bg-slate-50 rounded-xl border border-slate-200 text-xs flex items-start justify-between">
+              <div key={nov.id} className="p-3.5 bg-slate-50 rounded-xl border border-slate-200 text-xs flex flex-col sm:flex-row sm:items-start justify-between gap-2">
                 <div>
-                  <div className="flex items-center space-x-2">
+                  <div className="flex flex-wrap items-center gap-2">
                     <span className="font-mono font-bold text-brand-900">{nov.codigo_qr}</span>
                     <span className="font-bold text-slate-800">{nov.tipoNovedad}</span>
                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
@@ -665,7 +665,7 @@ export const InstructorDashboard: React.FC = () => {
                     Reportado: {nov.fecha} por Doc: {nov.reportadoPorDoc} ({nov.rolReportante})
                   </p>
                 </div>
-                <span className="text-[10px] font-bold bg-slate-100 text-slate-800 px-2 py-0.5 rounded-full">
+                <span className="text-[10px] font-bold bg-slate-100 text-slate-800 px-2 py-0.5 rounded-full self-start sm:self-auto">
                   {nov.estado}
                 </span>
               </div>
