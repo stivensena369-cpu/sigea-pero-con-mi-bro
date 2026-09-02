@@ -9,15 +9,24 @@ import {
   AlertCircle,
   Clock,
   MapPin,
+  Sparkles,
   RotateCcw,
   CheckSquare,
   ShieldAlert,
   Calendar,
+  Layers,
   Search,
+  Check,
+  X,
+  ExternalLink,
+  ChevronRight,
+  ShieldCheck,
+  AlertTriangle,
   Monitor,
   Keyboard,
   Mouse,
-  Cpu
+  Cpu,
+  BookOpen
 } from 'lucide-react';
 
 export const InstructorDashboard: React.FC = () => {
@@ -59,7 +68,7 @@ export const InstructorDashboard: React.FC = () => {
   const activeAmbiente = activeClass ? getAmbiente(activeClass.ambienteId) : undefined;
   const activeSede = activeClass ? getSede(activeClass.sedeId) : undefined;
 
-  // Filter students in the active class ficha
+  // Filter students in the active class ficha (Ficha 123456)
   const classStudents = users.filter(u => u.rol === 'Aprendiz' && u.fichaId === (activeClass?.fichaId || '123456'));
 
   const filteredStudents = classStudents.filter(
@@ -97,7 +106,7 @@ export const InstructorDashboard: React.FC = () => {
   );
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6 bg-slate-100 min-h-screen">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
       {/* Toast Notification */}
       {instructorToast && (
         <div
@@ -126,16 +135,16 @@ export const InstructorDashboard: React.FC = () => {
 
       {/* Instructor Active Class Control Center */}
       {activeClass && (
-        <div className="bg-[#003B46] rounded-2xl p-6 text-white shadow-xl relative overflow-hidden">
+        <div className="bg-gradient-to-r from-brand-900 via-brand-800 to-brand-700 rounded-2xl p-6 text-white shadow-xl relative overflow-hidden">
           <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
             <div className="space-y-2">
               <div className="flex items-center space-x-2 text-xs">
-                <span className="bg-amber-400 text-slate-950 font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider text-[10px]">
+                <span className="bg-emerald-500 text-white font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider text-[10px]">
                   Panel de Control del Instructor
                 </span>
-                <span className="text-emerald-200">Ficha: {activeClass.fichaId} (ADSO)</span>
-                <span className="text-emerald-400">•</span>
-                <span className="text-emerald-200">Clase #{activeClass.id}</span>
+                <span className="text-white/70">Ficha: {activeClass.fichaId} (ADSO)</span>
+                <span className="text-white/50">•</span>
+                <span className="text-white/70">Clase #{activeClass.id}</span>
                 <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${activeClass.estado === 'Finalizada' ? 'bg-slate-700 text-slate-300' : 'bg-emerald-500/30 text-emerald-300 border border-emerald-400/40'}`}>
                   {activeClass.estado}
                 </span>
@@ -145,7 +154,7 @@ export const InstructorDashboard: React.FC = () => {
                 {activeClass.tema}
               </h2>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 text-xs text-emerald-100">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 text-xs text-white/80">
                 <div className="flex items-center space-x-2">
                   <MapPin className="w-4 h-4 text-emerald-400" />
                   <span>
@@ -168,21 +177,21 @@ export const InstructorDashboard: React.FC = () => {
             {/* Quick Metrics Bar */}
             <div className="flex flex-wrap items-center gap-3">
               <div className="bg-white/10 backdrop-blur-md p-3.5 rounded-xl border border-white/20 text-center min-w-[110px]">
-                <span className="text-[10px] text-emerald-300 font-bold uppercase block">Verificados</span>
+                <span className="text-[10px] text-emerald-400 font-bold uppercase block">Verificados</span>
                 <span className="text-2xl font-black text-white">{completedStudents}</span>
-                <span className="text-[10px] text-emerald-200">Puestos 100%</span>
+                <span className="text-[10px] text-white/70">Puestos 100%</span>
               </div>
 
               <div className="bg-white/10 backdrop-blur-md p-3.5 rounded-xl border border-white/20 text-center min-w-[110px]">
                 <span className="text-[10px] text-amber-300 font-bold uppercase block">En Escaneo</span>
                 <span className="text-2xl font-black text-white">{inProgressStudents}</span>
-                <span className="text-[10px] text-emerald-200">Parciales</span>
+                <span className="text-[10px] text-white/70">Parciales</span>
               </div>
 
               <div className="bg-white/10 backdrop-blur-md p-3.5 rounded-xl border border-white/20 text-center min-w-[110px]">
                 <span className="text-[10px] text-red-300 font-bold uppercase block">Sin Registro</span>
                 <span className="text-2xl font-black text-white">{pendingStudents}</span>
-                <span className="text-[10px] text-emerald-200">Pendientes</span>
+                <span className="text-[10px] text-white/70">Pendientes</span>
               </div>
 
               {/* Finalize Class Action Button */}
@@ -190,7 +199,7 @@ export const InstructorDashboard: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setShowFinalizeModal(true)}
-                  className="px-4 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs shadow-lg transition-all flex items-center space-x-2 cursor-pointer ml-auto sm:ml-0"
+                  className="px-4 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs shadow-lg transition-all flex items-center space-x-2 cursor-pointer ml-auto sm:ml-0"
                 >
                   <CheckSquare className="w-4 h-4 text-white" />
                   <span>Finalizar Sesión de Clase</span>
@@ -202,18 +211,18 @@ export const InstructorDashboard: React.FC = () => {
       )}
 
       {/* Navigation Tabs */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-slate-200 pb-2 gap-3">
-        <div className="flex flex-wrap gap-2">
+      <div className="flex items-center justify-between border-b border-slate-200 pb-2">
+        <div className="flex space-x-2">
           <button
             onClick={() => setActiveTab('monitoreo')}
             className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all ${
               activeTab === 'monitoreo'
-                ? 'bg-[#003B46] text-white shadow-md'
-                : 'bg-white text-slate-600 hover:bg-slate-200 border border-slate-200'
+                ? 'bg-brand-900 text-white shadow-md'
+                : 'text-slate-600 hover:bg-slate-100'
             }`}
           >
             <Users className="w-4 h-4 text-emerald-400" />
-            <span>Monitoreo de Aprendices</span>
+            <span>Monitoreo de Aprendices y Puestos</span>
             <span className="text-[10px] bg-white/20 px-1.5 py-0.5 rounded-full ml-1">
               {totalStudents}
             </span>
@@ -223,8 +232,8 @@ export const InstructorDashboard: React.FC = () => {
             onClick={() => setActiveTab('solicitudes')}
             className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all relative ${
               activeTab === 'solicitudes'
-                ? 'bg-[#003B46] text-white shadow-md'
-                : 'bg-white text-slate-600 hover:bg-slate-200 border border-slate-200'
+                ? 'bg-brand-900 text-white shadow-md'
+                : 'text-slate-600 hover:bg-slate-100'
             }`}
           >
             <RotateCcw className="w-4 h-4 text-emerald-400" />
@@ -240,20 +249,20 @@ export const InstructorDashboard: React.FC = () => {
             onClick={() => setActiveTab('clases')}
             className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all ${
               activeTab === 'clases'
-                ? 'bg-[#003B46] text-white shadow-md'
-                : 'bg-white text-slate-600 hover:bg-slate-200 border border-slate-200'
+                ? 'bg-brand-900 text-white shadow-md'
+                : 'text-slate-600 hover:bg-slate-100'
             }`}
           >
             <Calendar className="w-4 h-4 text-emerald-400" />
-            <span>Historial de Clases</span>
+            <span>Historial de Mis Clases</span>
           </button>
 
           <button
             onClick={() => setActiveTab('novedades')}
             className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all ${
               activeTab === 'novedades'
-                ? 'bg-[#003B46] text-white shadow-md'
-                : 'bg-white text-slate-600 hover:bg-slate-200 border border-slate-200'
+                ? 'bg-brand-900 text-white shadow-md'
+                : 'text-slate-600 hover:bg-slate-100'
             }`}
           >
             <ShieldAlert className="w-4 h-4 text-emerald-400" />
@@ -266,10 +275,10 @@ export const InstructorDashboard: React.FC = () => {
             setReportTargetQr('');
             setReportModalOpen(true);
           }}
-          className="flex items-center space-x-1.5 text-xs text-red-700 bg-red-50 hover:bg-red-100 border border-red-200 px-3 py-2 rounded-xl font-bold transition-colors shadow-xs"
+          className="flex items-center space-x-1.5 text-xs text-red-800 bg-red-50 hover:bg-red-100 border border-red-300 px-3 py-1.5 rounded-xl font-semibold transition-colors"
         >
           <ShieldAlert className="w-3.5 h-3.5 text-red-600" />
-          <span>Reportar Daño / Falla</span>
+          <span className="hidden sm:inline">Reportar Daño / Falla</span>
         </button>
       </div>
 
@@ -285,20 +294,20 @@ export const InstructorDashboard: React.FC = () => {
                 placeholder="Buscar aprendiz por nombre o documento..."
                 value={searchTerm}
                 onChange={e => setSearchTerm(e.target.value)}
-                className="w-full pl-9 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-600"
+                className="w-full pl-9 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-700"
               />
             </div>
 
-            <div className="flex items-center space-x-3 text-xs text-slate-500">
+            <div className="flex items-center space-x-2 text-xs text-slate-500">
               <span className="font-semibold text-slate-700">Leyenda:</span>
               <span className="flex items-center gap-1 text-emerald-700 font-medium">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-600" /> Completo
+                <span className="w-2 h-2 rounded-full bg-emerald-500" /> Puesto Completo
               </span>
               <span className="flex items-center gap-1 text-amber-700 font-medium">
-                <span className="w-2.5 h-2.5 rounded-full bg-amber-500" /> En Registro
+                <span className="w-2 h-2 rounded-full bg-amber-500" /> En Registro
               </span>
               <span className="flex items-center gap-1 text-red-700 font-medium">
-                <span className="w-2.5 h-2.5 rounded-full bg-red-600" /> Sin Registro
+                <span className="w-2 h-2 rounded-full bg-red-500" /> Sin Registro
               </span>
             </div>
           </div>
@@ -328,7 +337,7 @@ export const InstructorDashboard: React.FC = () => {
                       ? 'border-emerald-300'
                       : hasSome
                       ? 'border-amber-300'
-                      : 'border-red-200'
+                      : 'border-slate-200'
                   }`}
                 >
                   {/* Top: Student Profile Header */}
@@ -340,8 +349,8 @@ export const InstructorDashboard: React.FC = () => {
                             isComplete
                               ? 'bg-emerald-600'
                               : hasSome
-                              ? 'bg-amber-500'
-                              : 'bg-red-500'
+                              ? 'bg-amber-600'
+                              : 'bg-slate-400'
                           }`}
                         >
                           {student.nombre[0]}
@@ -360,10 +369,10 @@ export const InstructorDashboard: React.FC = () => {
                       <span
                         className={`text-[10px] font-bold px-2.5 py-1 rounded-full border ${
                           isComplete
-                            ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
+                            ? 'bg-emerald-100 text-emerald-800 border-emerald-300'
                             : hasSome
-                            ? 'bg-amber-50 text-amber-800 border-amber-300'
-                            : 'bg-red-50 text-red-800 border-red-300'
+                            ? 'bg-amber-100 text-amber-800 border-amber-300'
+                            : 'bg-red-100 text-red-800 border-red-300'
                         }`}
                       >
                         {isComplete
@@ -379,7 +388,7 @@ export const InstructorDashboard: React.FC = () => {
                       {/* Slot 1: Monitor / AIO */}
                       <div
                         className={`p-2 rounded-xl border flex items-center justify-between ${
-                          hasMonitor ? 'bg-emerald-50/70 border-emerald-200 text-emerald-900' : 'bg-red-50/50 border-red-200 text-slate-400'
+                          hasMonitor ? 'bg-emerald-50/70 border-emerald-200 text-emerald-900' : 'bg-slate-50 border-slate-200 text-slate-400'
                         }`}
                       >
                         <div className="flex items-center space-x-2">
@@ -394,19 +403,19 @@ export const InstructorDashboard: React.FC = () => {
                               const a = activos.find(x => x.codigo_qr === hasMonitor.id_activo);
                               if (a) setSelectedBadgeAsset(a);
                             }}
-                            className="font-mono font-bold text-[10px] text-emerald-700 hover:underline"
+                            className="font-mono font-bold text-[10px] text-brand-900 hover:underline"
                           >
                             {hasMonitor.id_activo}
                           </button>
                         ) : (
-                          <span className="text-[10px] text-red-600 font-bold">Pendiente</span>
+                          <span className="text-[10px] text-red-500 font-semibold">Pendiente</span>
                         )}
                       </div>
 
                       {/* Slot 2: Teclado */}
                       <div
                         className={`p-2 rounded-xl border flex items-center justify-between ${
-                          hasKeyboard ? 'bg-emerald-50/70 border-emerald-200 text-emerald-900' : 'bg-red-50/50 border-red-200 text-slate-400'
+                          hasKeyboard ? 'bg-emerald-50/70 border-emerald-200 text-emerald-900' : 'bg-slate-50 border-slate-200 text-slate-400'
                         }`}
                       >
                         <div className="flex items-center space-x-2">
@@ -419,19 +428,19 @@ export const InstructorDashboard: React.FC = () => {
                               const a = activos.find(x => x.codigo_qr === hasKeyboard.id_activo);
                               if (a) setSelectedBadgeAsset(a);
                             }}
-                            className="font-mono font-bold text-[10px] text-emerald-700 hover:underline"
+                            className="font-mono font-bold text-[10px] text-brand-900 hover:underline"
                           >
                             {hasKeyboard.id_activo}
                           </button>
                         ) : (
-                          <span className="text-[10px] text-red-600 font-bold">Pendiente</span>
+                          <span className="text-[10px] text-red-500 font-semibold">Pendiente</span>
                         )}
                       </div>
 
                       {/* Slot 3: Ratón */}
                       <div
                         className={`p-2 rounded-xl border flex items-center justify-between ${
-                          hasMouse ? 'bg-emerald-50/70 border-emerald-200 text-emerald-900' : 'bg-red-50/50 border-red-200 text-slate-400'
+                          hasMouse ? 'bg-emerald-50/70 border-emerald-200 text-emerald-900' : 'bg-slate-50 border-slate-200 text-slate-400'
                         }`}
                       >
                         <div className="flex items-center space-x-2">
@@ -444,12 +453,12 @@ export const InstructorDashboard: React.FC = () => {
                               const a = activos.find(x => x.codigo_qr === hasMouse.id_activo);
                               if (a) setSelectedBadgeAsset(a);
                             }}
-                            className="font-mono font-bold text-[10px] text-emerald-700 hover:underline"
+                            className="font-mono font-bold text-[10px] text-brand-900 hover:underline"
                           >
                             {hasMouse.id_activo}
                           </button>
                         ) : (
-                          <span className="text-[10px] text-red-600 font-bold">Pendiente</span>
+                          <span className="text-[10px] text-red-500 font-semibold">Pendiente</span>
                         )}
                       </div>
 
@@ -457,7 +466,7 @@ export const InstructorDashboard: React.FC = () => {
                       {!isAIO && (
                         <div
                           className={`p-2 rounded-xl border flex items-center justify-between ${
-                            hasTower ? 'bg-emerald-50/70 border-emerald-200 text-emerald-900' : 'bg-red-50/50 border-red-200 text-slate-400'
+                            hasTower ? 'bg-emerald-50/70 border-emerald-200 text-emerald-900' : 'bg-slate-50 border-slate-200 text-slate-400'
                           }`}
                         >
                           <div className="flex items-center space-x-2">
@@ -470,12 +479,12 @@ export const InstructorDashboard: React.FC = () => {
                                 const a = activos.find(x => x.codigo_qr === hasTower.id_activo);
                                 if (a) setSelectedBadgeAsset(a);
                               }}
-                              className="font-mono font-bold text-[10px] text-emerald-700 hover:underline"
+                              className="font-mono font-bold text-[10px] text-brand-900 hover:underline"
                             >
                               {hasTower.id_activo}
                             </button>
                           ) : (
-                            <span className="text-[10px] text-red-600 font-bold">Pendiente</span>
+                            <span className="text-[10px] text-red-500 font-semibold">Pendiente</span>
                           )}
                         </div>
                       )}
@@ -498,7 +507,7 @@ export const InstructorDashboard: React.FC = () => {
                       title="Desvincular activos y permitir al aprendiz escanear una nueva estación"
                     >
                       <RotateCcw className="w-3.5 h-3.5 text-amber-700" />
-                      <span>Autorizar Cambio</span>
+                      <span>Autorizar Cambio de Puesto</span>
                     </button>
                   </div>
                 </div>
@@ -537,7 +546,7 @@ export const InstructorDashboard: React.FC = () => {
                         <span
                           className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
                             sol.estado === 'Pendiente'
-                              ? 'bg-amber-100 text-amber-800'
+                              ? 'bg-red-100 text-red-800'
                               : 'bg-emerald-100 text-emerald-800'
                           }`}
                         >
@@ -586,7 +595,7 @@ export const InstructorDashboard: React.FC = () => {
                 <span className="font-bold text-slate-900 text-sm">
                   Clase #2: Bases de Datos Relacionales y Normalización
                 </span>
-                <span className="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full">
+                <span className="bg-slate-200 text-slate-800 text-[10px] font-bold px-2 py-0.5 rounded-full">
                   Finalizada ✓
                 </span>
               </div>
@@ -596,12 +605,12 @@ export const InstructorDashboard: React.FC = () => {
                 <span>Ficha: 123456 (ADSO)</span>
               </div>
               <div className="bg-white p-3 rounded-lg border border-slate-200 text-slate-700 space-y-1">
-                <p className="font-bold text-[#003B46]">Acta de Cierre y Verificación:</p>
+                <p className="font-semibold text-emerald-700">Acta de Cierre y Verificación:</p>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px]">
-                  <span className="text-emerald-700 font-semibold">✓ Equipos apagados</span>
-                  <span className="text-emerald-700 font-semibold">✓ Periféricos completos</span>
-                  <span className="text-emerald-700 font-semibold">✓ Puestos ordenados</span>
-                  <span className="text-emerald-700 font-semibold">✓ Llaves entregadas</span>
+                  <span className="text-emerald-700">✓ Equipos apagados</span>
+                  <span className="text-emerald-700">✓ Periféricos completos</span>
+                  <span className="text-emerald-700">✓ Puestos ordenados</span>
+                  <span className="text-emerald-700">✓ Llaves entregadas</span>
                 </div>
                 <p className="text-[11px] text-slate-500 pt-1">
                   <em>"Sesión finalizada a tiempo. 18 aprendices presentes. Todos los equipos entregados en orden."</em> — Firmado: Carlos Ramírez
@@ -641,7 +650,7 @@ export const InstructorDashboard: React.FC = () => {
               <div key={nov.id} className="p-3.5 bg-slate-50 rounded-xl border border-slate-200 text-xs flex items-start justify-between">
                 <div>
                   <div className="flex items-center space-x-2">
-                    <span className="font-mono font-bold text-[#003B46]">{nov.codigo_qr}</span>
+                    <span className="font-mono font-bold text-brand-900">{nov.codigo_qr}</span>
                     <span className="font-bold text-slate-800">{nov.tipoNovedad}</span>
                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
                       nov.prioridad === 'Crítica' || nov.prioridad === 'Alta'
@@ -656,7 +665,7 @@ export const InstructorDashboard: React.FC = () => {
                     Reportado: {nov.fecha} por Doc: {nov.reportadoPorDoc} ({nov.rolReportante})
                   </p>
                 </div>
-                <span className="text-[10px] font-bold bg-emerald-100 text-emerald-900 px-2 py-0.5 rounded-full">
+                <span className="text-[10px] font-bold bg-slate-100 text-slate-800 px-2 py-0.5 rounded-full">
                   {nov.estado}
                 </span>
               </div>
@@ -670,7 +679,7 @@ export const InstructorDashboard: React.FC = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-xs">
           <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-150">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-              <div className="flex items-center space-x-2 text-[#003B46]">
+              <div className="flex items-center space-x-2 text-brand-900">
                 <CheckSquare className="w-5 h-5" />
                 <h3 className="font-bold text-slate-900 text-base">Acta de Cierre y Finalización de Clase</h3>
               </div>
@@ -695,7 +704,7 @@ export const InstructorDashboard: React.FC = () => {
                     type="checkbox"
                     checked={checklist.equiposApagados}
                     onChange={e => setChecklist({ ...checklist, equiposApagados: e.target.checked })}
-                    className="w-4 h-4 text-emerald-600 rounded focus:ring-emerald-500"
+                    className="w-4 h-4 text-brand-900 rounded focus:ring-brand-700"
                   />
                   <span className="text-slate-700 font-medium">1. Todos los computadores y pantallas apagados correctamente</span>
                 </label>
@@ -705,7 +714,7 @@ export const InstructorDashboard: React.FC = () => {
                     type="checkbox"
                     checked={checklist.perifericosCompletos}
                     onChange={e => setChecklist({ ...checklist, perifericosCompletos: e.target.checked })}
-                    className="w-4 h-4 text-emerald-600 rounded focus:ring-emerald-500"
+                    className="w-4 h-4 text-brand-900 rounded focus:ring-brand-700"
                   />
                   <span className="text-slate-700 font-medium">2. Teclados, ratones y cables verificados completos y en su sitio</span>
                 </label>
@@ -715,7 +724,7 @@ export const InstructorDashboard: React.FC = () => {
                     type="checkbox"
                     checked={checklist.puestosOrdenados}
                     onChange={e => setChecklist({ ...checklist, puestosOrdenados: e.target.checked })}
-                    className="w-4 h-4 text-emerald-600 rounded focus:ring-emerald-500"
+                    className="w-4 h-4 text-brand-900 rounded focus:ring-brand-700"
                   />
                   <span className="text-slate-700 font-medium">3. Puestos limpios, sillas organizadas y sin residuos</span>
                 </label>
@@ -725,7 +734,7 @@ export const InstructorDashboard: React.FC = () => {
                     type="checkbox"
                     checked={checklist.novedadesReportadas}
                     onChange={e => setChecklist({ ...checklist, novedadesReportadas: e.target.checked })}
-                    className="w-4 h-4 text-emerald-600 rounded focus:ring-emerald-500"
+                    className="w-4 h-4 text-brand-900 rounded focus:ring-brand-700"
                   />
                   <span className="text-slate-700 font-medium">4. Novedades técnicas reportadas en el sistema SIGEA</span>
                 </label>
@@ -735,7 +744,7 @@ export const InstructorDashboard: React.FC = () => {
                     type="checkbox"
                     checked={checklist.llavesEntregadas}
                     onChange={e => setChecklist({ ...checklist, llavesEntregadas: e.target.checked })}
-                    className="w-4 h-4 text-emerald-600 rounded focus:ring-emerald-500"
+                    className="w-4 h-4 text-brand-900 rounded focus:ring-brand-700"
                   />
                   <span className="text-slate-700 font-medium">5. Salón cerrado y llaves listas para entrega en Coordinación</span>
                 </label>
@@ -750,7 +759,7 @@ export const InstructorDashboard: React.FC = () => {
                   value={observacionesCierre}
                   onChange={e => setObservacionesCierre(e.target.value)}
                   placeholder="Comentarios adicionales sobre la jornada, aprendices ausentes o condiciones del aula..."
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-600 focus:outline-none resize-none text-xs"
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-700 focus:outline-none resize-none"
                 />
               </div>
 
@@ -787,7 +796,6 @@ export const InstructorDashboard: React.FC = () => {
         defaultQr={reportTargetQr}
         defaultClaseId={activeClassId}
       />
-      
     </div>
   );
 };
