@@ -391,132 +391,180 @@ export const InstructorDashboard: React.FC = () => {
                       </span>
                     </div>
 
-                    {/* Asset Checklist Status Matrix */}
-                    <div className="grid grid-cols-2 gap-2 my-3 text-xs">
+                    {/* Asset Checklist Status Matrix - Rediseñado en tarjetas verticales limpias */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 my-3">
                       {/* Slot 1: Monitor / AIO */}
-                      <div
-                        className={`p-2 rounded-xl border flex items-center justify-between ${
-                          hasMonitor ? 'bg-emerald-50/70 border-emerald-200 text-emerald-900' : 'bg-slate-50 border-slate-200 text-slate-400'
-                        }`}
-                      >
-                        <div className="flex items-center space-x-2 shrink-0">
-                          <Monitor className="w-4 h-4" />
-                          <span className="font-semibold text-[11px]">
-                            {isAIO ? 'Todo-en-Uno' : 'Monitor'}
-                          </span>
-                        </div>
-                        {hasMonitor ? (
-                          <div className="flex flex-col items-end pl-2">
+                      <div className={`p-3 rounded-xl border flex flex-col justify-between space-y-2 ${
+                        hasMonitor ? 'bg-emerald-50/50 border-emerald-200' : 'bg-slate-50 border-slate-200'
+                      }`}>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-2">
+                            <Monitor className={`w-4 h-4 ${hasMonitor ? 'text-emerald-700' : 'text-slate-400'}`} />
+                            <span className="font-semibold text-xs text-slate-800">
+                              {isAIO ? 'Todo-en-Uno' : 'Monitor'}
+                            </span>
+                          </div>
+                          {hasMonitor ? (
                             <button
                               onClick={() => {
                                 const a = activos.find(x => x.codigo_qr === hasMonitor.id_activo);
                                 if (a) setSelectedBadgeAsset(a);
                               }}
-                              className="font-mono font-bold text-[10px] text-brand-900 hover:underline text-right"
+                              className="font-mono font-bold text-xs text-brand-900 hover:underline bg-white px-2 py-0.5 rounded border border-emerald-200"
                             >
                               {hasMonitor.id_activo}
                             </button>
-                            <button className="text-[9px] font-bold text-brand-600 hover:text-brand-800 flex items-center gap-0.5 mt-0.5 transition-colors">
-                              <History className="w-2.5 h-2.5" />
-                              Ver historial de este dispositivo
+                          ) : (
+                            <span className="text-[10px] text-red-600 font-bold bg-red-50 px-2 py-0.5 rounded-full border border-red-200">
+                              Pendiente
+                            </span>
+                          )}
+                        </div>
+
+                        {hasMonitor && (
+                          <div className="flex items-center justify-between pt-2 border-t border-emerald-200/60 text-[10px]">
+                            <span className="text-emerald-800/80 font-medium">Vinculado</span>
+                            <button
+                              onClick={() => {
+                                const a = activos.find(x => x.codigo_qr === hasMonitor.id_activo);
+                                if (a) setSelectedBadgeAsset(a);
+                              }}
+                              className="font-bold text-brand-700 hover:text-brand-900 flex items-center gap-1 transition-colors"
+                            >
+                              <History className="w-3 h-3" />
+                              <span>Ver historial</span>
                             </button>
                           </div>
-                        ) : (
-                          <span className="text-[10px] text-red-500 font-semibold">Pendiente</span>
                         )}
                       </div>
 
                       {/* Slot 2: Teclado */}
-                      <div
-                        className={`p-2 rounded-xl border flex items-center justify-between ${
-                          hasKeyboard ? 'bg-emerald-50/70 border-emerald-200 text-emerald-900' : 'bg-slate-50 border-slate-200 text-slate-400'
-                        }`}
-                      >
-                        <div className="flex items-center space-x-2 shrink-0">
-                          <Keyboard className="w-4 h-4" />
-                          <span className="font-semibold text-[11px]">Teclado</span>
-                        </div>
-                        {hasKeyboard ? (
-                          <div className="flex flex-col items-end pl-2">
+                      <div className={`p-3 rounded-xl border flex flex-col justify-between space-y-2 ${
+                        hasKeyboard ? 'bg-emerald-50/50 border-emerald-200' : 'bg-slate-50 border-slate-200'
+                      }`}>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-2">
+                            <Keyboard className={`w-4 h-4 ${hasKeyboard ? 'text-emerald-700' : 'text-slate-400'}`} />
+                            <span className="font-semibold text-xs text-slate-800">Teclado</span>
+                          </div>
+                          {hasKeyboard ? (
                             <button
                               onClick={() => {
                                 const a = activos.find(x => x.codigo_qr === hasKeyboard.id_activo);
                                 if (a) setSelectedBadgeAsset(a);
                               }}
-                              className="font-mono font-bold text-[10px] text-brand-900 hover:underline text-right"
+                              className="font-mono font-bold text-xs text-brand-900 hover:underline bg-white px-2 py-0.5 rounded border border-emerald-200"
                             >
                               {hasKeyboard.id_activo}
                             </button>
-                            <button className="text-[9px] font-bold text-brand-600 hover:text-brand-800 flex items-center gap-0.5 mt-0.5 transition-colors">
-                              <History className="w-2.5 h-2.5" />
-                              Ver historial de este dispositivo
+                          ) : (
+                            <span className="text-[10px] text-red-600 font-bold bg-red-50 px-2 py-0.5 rounded-full border border-red-200">
+                              Pendiente
+                            </span>
+                          )}
+                        </div>
+
+                        {hasKeyboard && (
+                          <div className="flex items-center justify-between pt-2 border-t border-emerald-200/60 text-[10px]">
+                            <span className="text-emerald-800/80 font-medium">Vinculado</span>
+                            <button
+                              onClick={() => {
+                                const a = activos.find(x => x.codigo_qr === hasKeyboard.id_activo);
+                                if (a) setSelectedBadgeAsset(a);
+                              }}
+                              className="font-bold text-brand-700 hover:text-brand-900 flex items-center gap-1 transition-colors"
+                            >
+                              <History className="w-3 h-3" />
+                              <span>Ver historial</span>
                             </button>
                           </div>
-                        ) : (
-                          <span className="text-[10px] text-red-500 font-semibold">Pendiente</span>
                         )}
                       </div>
 
                       {/* Slot 3: Ratón */}
-                      <div
-                        className={`p-2 rounded-xl border flex items-center justify-between ${
-                          hasMouse ? 'bg-emerald-50/70 border-emerald-200 text-emerald-900' : 'bg-slate-50 border-slate-200 text-slate-400'
-                        }`}
-                      >
-                        <div className="flex items-center space-x-2 shrink-0">
-                          <Mouse className="w-4 h-4" />
-                          <span className="font-semibold text-[11px]">Ratón</span>
-                        </div>
-                        {hasMouse ? (
-                          <div className="flex flex-col items-end pl-2">
+                      <div className={`p-3 rounded-xl border flex flex-col justify-between space-y-2 ${
+                        hasMouse ? 'bg-emerald-50/50 border-emerald-200' : 'bg-slate-50 border-slate-200'
+                      }`}>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-2">
+                            <Mouse className={`w-4 h-4 ${hasMouse ? 'text-emerald-700' : 'text-slate-400'}`} />
+                            <span className="font-semibold text-xs text-slate-800">Ratón</span>
+                          </div>
+                          {hasMouse ? (
                             <button
                               onClick={() => {
                                 const a = activos.find(x => x.codigo_qr === hasMouse.id_activo);
                                 if (a) setSelectedBadgeAsset(a);
                               }}
-                              className="font-mono font-bold text-[10px] text-brand-900 hover:underline text-right"
+                              className="font-mono font-bold text-xs text-brand-900 hover:underline bg-white px-2 py-0.5 rounded border border-emerald-200"
                             >
                               {hasMouse.id_activo}
                             </button>
-                            <button className="text-[9px] font-bold text-brand-600 hover:text-brand-800 flex items-center gap-0.5 mt-0.5 transition-colors">
-                              <History className="w-2.5 h-2.5" />
-                              Ver historial de este dispositivo
+                          ) : (
+                            <span className="text-[10px] text-red-600 font-bold bg-red-50 px-2 py-0.5 rounded-full border border-red-200">
+                              Pendiente
+                            </span>
+                          )}
+                        </div>
+
+                        {hasMouse && (
+                          <div className="flex items-center justify-between pt-2 border-t border-emerald-200/60 text-[10px]">
+                            <span className="text-emerald-800/80 font-medium">Vinculado</span>
+                            <button
+                              onClick={() => {
+                                const a = activos.find(x => x.codigo_qr === hasMouse.id_activo);
+                                if (a) setSelectedBadgeAsset(a);
+                              }}
+                              className="font-bold text-brand-700 hover:text-brand-900 flex items-center gap-1 transition-colors"
+                            >
+                              <History className="w-3 h-3" />
+                              <span>Ver historial</span>
                             </button>
                           </div>
-                        ) : (
-                          <span className="text-[10px] text-red-500 font-semibold">Pendiente</span>
                         )}
                       </div>
 
                       {/* Slot 4: Torre */}
                       {!isAIO && (
-                        <div
-                          className={`p-2 rounded-xl border flex items-center justify-between ${
-                            hasTower ? 'bg-emerald-50/70 border-emerald-200 text-emerald-900' : 'bg-slate-50 border-slate-200 text-slate-400'
-                          }`}
-                        >
-                          <div className="flex items-center space-x-2 shrink-0">
-                            <Cpu className="w-4 h-4" />
-                            <span className="font-semibold text-[11px]">Torre CPU</span>
-                          </div>
-                          {hasTower ? (
-                            <div className="flex flex-col items-end pl-2">
+                        <div className={`p-3 rounded-xl border flex flex-col justify-between space-y-2 ${
+                          hasTower ? 'bg-emerald-50/50 border-emerald-200' : 'bg-slate-50 border-slate-200'
+                        }`}>
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-2">
+                              <Cpu className={`w-4 h-4 ${hasTower ? 'text-emerald-700' : 'text-slate-400'}`} />
+                              <span className="font-semibold text-xs text-slate-800">Torre CPU</span>
+                            </div>
+                            {hasTower ? (
                               <button
                                 onClick={() => {
                                   const a = activos.find(x => x.codigo_qr === hasTower.id_activo);
                                   if (a) setSelectedBadgeAsset(a);
                                 }}
-                                className="font-mono font-bold text-[10px] text-brand-900 hover:underline text-right"
+                                className="font-mono font-bold text-xs text-brand-900 hover:underline bg-white px-2 py-0.5 rounded border border-emerald-200"
                               >
                                 {hasTower.id_activo}
                               </button>
-                              <button className="text-[9px] font-bold text-brand-600 hover:text-brand-800 flex items-center gap-0.5 mt-0.5 transition-colors">
-                                <History className="w-2.5 h-2.5" />
-                                Ver historial de este dispositivo
+                            ) : (
+                              <span className="text-[10px] text-red-600 font-bold bg-red-50 px-2 py-0.5 rounded-full border border-red-200">
+                                Pendiente
+                              </span>
+                            )}
+                          </div>
+
+                          {hasTower && (
+                            <div className="flex items-center justify-between pt-2 border-t border-emerald-200/60 text-[10px]">
+                              <span className="text-emerald-800/80 font-medium">Vinculado</span>
+                              <button
+                                onClick={() => {
+                                  const a = activos.find(x => x.codigo_qr === hasTower.id_activo);
+                                  if (a) setSelectedBadgeAsset(a);
+                                }}
+                                className="font-bold text-brand-700 hover:text-brand-900 flex items-center gap-1 transition-colors"
+                              >
+                                <History className="w-3 h-3" />
+                                <span>Ver historial</span>
                               </button>
                             </div>
-                          ) : (
-                            <span className="text-[10px] text-red-500 font-semibold">Pendiente</span>
                           )}
                         </div>
                       )}
